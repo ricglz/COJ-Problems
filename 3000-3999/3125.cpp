@@ -1,42 +1,29 @@
 #include <iostream>
 #include <string>
-#include <sstream>
+#include <map>
 
 using namespace std;
 
-int main(int argc, char const *argv[])
-{
-	string bin;
+int main(int argc, char const *argv[]){
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	string bin, ans;
 	cin >> bin;
-	string oct;
-	int tam=0;
-	int suma=0;
-	for (int i = bin.length()-1; i >= 0; --i) {
-		if (bin[i]=='1') {
-			switch(tam){
-				case 0:
-					suma=1;
-					break;
-				case 1:
-					suma+=2;
-					break;
-				case 2:
-					suma+=4;
-					break;
-			}
-		}
-		if (tam==2) {
-			oct = static_cast<ostringstream*>( &(ostringstream() << suma) )->str() + oct;
-			tam=0;
-			suma=0;
-		}
-		else{
-			tam++;
-		}
+	map <string, string> clave;
+	clave ["000"] = clave ["0"] = "0";
+	clave ["001"] = clave ["1"] = "1";
+	clave["010"] = clave ["10"] = "2";
+	clave["011"] = clave ["11"] = "3";
+	clave ["100"] = "4";
+	clave ["101"] = "5";
+	clave ["110"] = "6";
+	clave ["111"] = "7";
+	for (int i = bin.length()-1; i >=2 ; i-=3){
+		ans = clave[bin.substr(i-2, 3)] + ans;
 	}
-	if (tam!=0){
-		oct = static_cast<ostringstream*>( &(ostringstream() << suma) )->str() + oct;
+	if (bin.length()%3){
+		ans = clave[bin.substr(0, bin.length()%3)] + ans;
 	}
-	cout << oct << endl;
+	cout << ans << endl;
 	return 0;
 }

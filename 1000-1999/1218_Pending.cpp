@@ -27,6 +27,7 @@ int main(int argc, char const *argv[]){
 			scanf("%LF", &num[i]);
 		}
 		for (int i = 0; i < 5; ++i){
+			printf("%.0LF %i\n", num[i]+k, k);
 			sum+=combinations(num[i]+k, k);
 		}
 		printf("%.0LF\n", sum);

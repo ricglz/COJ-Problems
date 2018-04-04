@@ -1,50 +1,36 @@
 #include <cstdio>
-#include <numeric>
+#include <vector>
 
 using namespace std;
 
 int main(int argc, char const *argv[]){
-	long long donors, mitad=0;
-	scanf("%lli", &donors);
-	long long donations[donors], result[donors];
-	for (long long i = 0; i < donors/2; ++i){
-		scanf("%lli", &donations[i]);
-		mitad+=donations[i];
+	long donationsQ, queriesQ;
+	scanf("%lu", &donationsQ);
+	int donations [donationsQ];
+	for (int i = 0; i < donationsQ; ++i){
+		scanf("%u", &donations[i]);
 	}
-	long long totalS=mitad;
-	for (long long i = donors/2; i < donors; ++i){
-		scanf("%lli", &donations[i]);
-		totalS+=donations[i];
+	scanf("%lu", &queriesQ);
+	long queries[queriesQ], bigger=0;
+	for (int i = 0; i < queriesQ; ++i){
+		scanf("%lu", &queries[i]);
+		if (queries[i]>bigger){
+			bigger=queries[i];
+		}
 	}
-	long long quary;
-	scanf("%lli", &quary);
-	long long quaries[quary];
-	for (long long i = 0; i < quary; ++i){
-		scanf("%lli", &quaries[i]);
+	vector <long> answer(bigger+1, 0);
+	for (int i = 0, pos=1; i < donationsQ; ++i){
+		while(donations[i]>0){
+			answer[pos] = i+1;
+			pos++;
+			donations[i]--;
+		}
 	}
-	partial_sum(donations, donations+donors, result);
-	for (long long i = 0; i < quary ; ++i){
-		if (quaries[i]<=mitad){
-			for (long long i2 = 0; i2 < donors/2; ++i2){
-				if(result[i2]>=quaries[i]){
-					printf("%lli\n", i2+1);
-					break;
-				}
-			}
+	for (int i = 0; i < queriesQ; ++i){
+		if (answer[queries[i]]){
+			printf("%lu\n", answer[queries[i]]);
 		}
-		else if(quaries[i]==totalS){ 
-			printf("%lli\n", donors);
-		}
-		else if(quaries[i]<totalS){
-			for (long long i2 = donors/2; i2 < donors; ++i2){
-				if(result[i2]>=quaries[i]){
-					printf("%lli\n", i2+1);
-					break;
-				}
-			}
-
-		}
-		else if(quaries[i]>totalS){
+		else{
 			printf("none\n");
 		}
 	}
