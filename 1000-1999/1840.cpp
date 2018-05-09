@@ -1,51 +1,42 @@
 #include <cstdio>
 #include <cstring>
 
+bool isSecure(int amount[]){
+	for (int i = 1; i < 6; ++i){
+		if (amount[i]!=amount[i-1]){
+			return true;
+		}
+	}
+	return false;
+}
+
 int main(int argc, char const *argv[]){
 	int testCases;
+	char word [200];
 	scanf("%i", &testCases); //lees cantidad de test cases
-	for (int i = 0; i < testCases; ++i){
-		int virus[]= {0,0,0,0,0,0};
-		char password[101];
-		scanf("%s", password); //lees la contraseña
-		for (int i2 = 0; i2 < strlen(password); ++i2){
-			switch(password[i2]){
-				case 'B':
-					virus[0]++;
-					break;
-				case 'R':
-					virus[1]++;
-					break;
-				case 'O':
-					virus[2]++;
-					break;
-				case 'K':
-					virus[3]++;
-					break;
-				case 'E':
-					virus[4]++;
-					break;
-				case 'N':
-					virus[5]++;
-					break;
-			}
+	while(testCases--){
+		int amount [] = {0, 0, 0, 0, 0, 0};
+		scanf("%s", word);
+		for (int i = 0; i < strlen(word); ++i){
+			if(word[i]=='B')
+				amount[0]++;
+			else if(word[i]=='R')
+				amount[1]++;
+			else if(word[i]=='O')
+				amount[2]++;
+			else if(word[i]=='K')
+				amount[3]++;
+			else if(word[i]=='E')
+				amount[4]++;
+			else if(word[i]=='N')
+				amount[5]++;
 		}
-		bool todosIguales=true;
-		int pos=0;
-		while(pos<6 && todosIguales){
-			if(virus[pos]==0){
-				todosIguales=false;
-			}
-			else{
-				pos++;
-			}
-		}
-		if (todosIguales){
-			printf("%s\n", "No Secure");
-		}
+		if(isSecure(amount))
+			printf("Secure\n");
 		else{
-			printf("%s\n", "Secure");
+			printf("No Secure\n");
 		}
+
 	}
 	return 0;
 }

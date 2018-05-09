@@ -8,7 +8,7 @@ using namespace std;
 #define LL long long
 
 LL numbers[100000];
-LL* st;
+LL st [1048580];
 
 void construct(LL node, LL left, LL right){
 	if (left==right){
@@ -16,16 +16,10 @@ void construct(LL node, LL left, LL right){
 		return;
 	}
 	int m = (left+right)/2;
-	construct(node<<1, left, m);
-	construct((node<<1)+1, m+1, right);
-	st[node] = st[node<<1] + st[(node<<1)+1];
-}
-
-void create(LL amount){
-	LL x = (int) (ceil(log2(amount)));
-	LL max_size = (2 << x)-1;
-	st = (long long int *) malloc(sizeof(long long int)*max_size);
-	construct(1, 0, amount-1);
+	LL leftSon = node<<1, rightSon = leftSon+1;
+	construct(leftSon, left, m);
+	construct(rightSon, m+1, right);
+	st[node] = st[leftSon] + st[rightSon];
 }
 
 LL sum(LL node, LL left, LL right, LL start, LL end){
@@ -34,7 +28,8 @@ LL sum(LL node, LL left, LL right, LL start, LL end){
 	if(start <= left && right <= end)
 		return st[node];
 	LL m = (left+right)>>1;
-	return sum(node<<1, left, m, start, end) + sum((node<<1)+1, m+1, right, start, end);
+	LL leftSon = node << 1;
+	return sum(leftSon, left, m, start, end) + sum(leftSon+1, m+1, right, start, end);
 }
 
 int main(int argc, char const *argv[]){
@@ -48,13 +43,12 @@ int main(int argc, char const *argv[]){
 		for (int i = 0; i < amount; ++i){
 			cin >> numbers[i];
 		}
-		create(amount);
+		construct(1, 0, amount-1);
 		while(sums--){
 			LL start, end;
 			cin >> start >> end;
 			cout << sum(1, 0, amount-1, start, end) << "\n";
 		}
-		free(st);
 		if(testCases) cout << "\n";
 	}
 	return 0;
